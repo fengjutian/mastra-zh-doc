@@ -1,4 +1,98 @@
 ---
-// 重定向页面，确保原始路径能正确跳转到文档
-Astro.redirect('/docs/agents-overview');
+import { getCollection } from 'astro:content';
+import BaseHead from '../../components/BaseHead.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+
+// 获取所有文档
+const docs = await getCollection('docs');
 ---
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <BaseHead title="文档 | Mastra" description="Mastra 文档中心" />
+    <style>
+      .docs-list {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 2em 1em;
+      }
+      
+      .docs-list h1 {
+        font-size: 2.5em;
+        margin-bottom: 1em;
+        color: rgb(var(--black));
+      }
+      
+      .docs-list .description {
+        margin-bottom: 2em;
+        color: rgb(var(--gray));
+        font-size: 1.1em;
+      }
+      
+      .docs-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 1.5em;
+      }
+      
+      .doc-card {
+        background: white;
+        border: 1px solid rgba(var(--gray-light), 100%);
+        border-radius: 0.5rem;
+        padding: 1.5em;
+        transition: transform 0.2s, box-shadow 0.2s;
+      }
+      
+      .doc-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+      }
+      
+      .doc-card h3 {
+        margin-top: 0;
+        margin-bottom: 0.5em;
+        color: rgb(var(--black));
+      }
+      
+      .doc-card p {
+        color: rgb(var(--gray));
+        margin-bottom: 1em;
+      }
+      
+      .doc-card a {
+        color: var(--accent);
+        text-decoration: none;
+        font-weight: 500;
+      }
+      
+      .doc-card a:hover {
+        text-decoration: underline;
+      }
+    </style>
+  </head>
+  <body>
+    <Header />
+    <main>
+      <div class="docs-list">
+        <h1>Mastra 文档中心</h1>
+        <p class="description">探索 Mastra 的核心功能和使用指南</p>
+        
+        <div class="docs-grid">
+          {docs.map(doc => {
+            const docSlug = doc.id.replace(/^.*\//, '').replace(/\.(md|mdx)$/, '');
+            return (
+              <div class="doc-card" key={doc.id}>
+                <h3>{doc.data.title || docSlug}</h3>
+                <p>{doc.data.description || '查看此文档以了解更多信息。'}</p>
+                <a href={`/docs/${docSlug}`}>查看文档</a>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    </main>
+    <Footer />
+  </body>
+</html>

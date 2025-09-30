@@ -6,43 +6,35 @@ import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang="zh-CN">
 	<head>
-		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
+		<BaseHead title="简介 | Mastra 文档" description="Mastra 是一个 TypeScript 智能体框架，帮助你快速构建 AI 应用与功能。" />
 	</head>
 	<body>
 		<Header />
 		<main>
-			<h1>🧑‍🚀 Hello, Astronaut!</h1>
-			<p>
-				Welcome to the official <a href="https://astro.build/">Astro</a> blog starter template. This
-				template serves as a lightweight, minimally-styled starting point for anyone looking to build
-				a personal website, blog, or portfolio with Astro.
-			</p>
-			<p>
-				This template comes with a few integrations already configured in your
-				<code>astro.config.mjs</code> file. You can customize your setup with
-				<a href="https://astro.build/integrations">Astro Integrations</a> to add tools like Tailwind,
-				React, or Vue to your project.
-			</p>
-			<p>Here are a few ideas on how to get started with the template:</p>
-			<ul>
-				<li>Edit this page in <code>src/pages/index.astro</code></li>
-				<li>Edit the site header items in <code>src/components/Header.astro</code></li>
-				<li>Add your name to the footer in <code>src/components/Footer.astro</code></li>
-				<li>Check out the included blog posts in <code>src/content/blog/</code></li>
-				<li>Customize the blog post page layout in <code>src/layouts/BlogPost.astro</code></li>
-			</ul>
-			<p>
-				Have fun! If you get stuck, remember to
-				<a href="https://docs.astro.build/">read the docs</a>
-				or <a href="https://astro.build/chat">join us on Discord</a> to ask questions.
-			</p>
-			<p>
-				Looking for a blog template with a bit more personality? Check out
-				<a href="https://github.com/Charca/astro-blog-template">astro-blog-template</a>
-				by <a href="https://twitter.com/Charca">Maxi Ferreira</a>.
-			</p>
+			<article>
+				<h1>关于 Mastra</h1>
+				
+				<p>Mastra 是一个开源的 TypeScript 智能体框架。</p>
+				
+				<p>它旨在为你提供构建 AI 应用与功能所需的原子能力。</p>
+				
+				<p>借助 Mastra，你可以构建具备记忆、可执行函数的 <a href="/docs/agents/overview.mdx">AI 智能体</a>，或在确定性 <a href="/docs/workflows/overview.mdx">工作流</a> 中串联 LLM 调用。你可以在 Mastra 的 <a href="/docs/server-db/local-dev-playground.mdx">本地开发游乐场</a> 中与智能体对话，通过 <a href="/docs/rag/overview.mdx">RAG</a> 向它们投喂应用专属知识，并用 Mastra 的 <a href="/docs/evals/overview.mdx">评估</a> 对输出打分。</p>
+				
+				<h2>主要特性包括：</h2>
+				
+				<ul>
+					<li><strong><a href="https://sdk.vercel.ai/docs/introduction">模型路由</a></strong>：Mastra 使用 <a href="https://sdk.vercel.ai/docs/introduction">Vercel AI SDK</a> 进行模型路由，为 OpenAI、Anthropic、Google Gemini 等任何 LLM 提供商提供统一接口。</li>
+					<li><strong><a href="/docs/agents/agent-memory.mdx">智能体记忆与工具调用</a></strong>：在 Mastra 中，你可以为智能体配备工具（函数），并可按"最近性、语义相似度或会话线程"持久化与检索记忆。</li>
+					<li><strong><a href="/docs/workflows/overview.mdx">工作流图</a></strong>：当你需要以确定性方式执行 LLM 调用时，Mastra 提供基于图的工作流引擎。你可定义离散步骤，记录每次运行各步的输入输出，并接入可观测工具。Mastra 工作流提供简洁的控制流语法（<code>.then()</code>、<code>.branch()</code>、<code>.parallel()</code>），支持分支与链式调用。</li>
+					<li><strong><a href="/docs/server-db/local-dev-playground.mdx">智能体开发游乐场</a></strong>：本地开发时，可在 Mastra 的智能体开发环境中与之对话，实时查看其状态与记忆。</li>
+					<li><strong><a href="/docs/rag/overview.mdx">检索增强生成（RAG）</a></strong>：Mastra 提供 API 将文档（文本、HTML、Markdown、JSON）分块、生成嵌入并存储到向量数据库；查询时，它检索相关块，让 LLM 回答基于你的数据。统一 API 支持多种向量库（Pinecone、pgvector 等）与嵌入提供商（OpenAI、Cohere 等）。</li>
+					<li><strong><a href="/docs/deployment/deployment.mdx">部署</a></strong>：Mastra 支持将智能体与工作流打包进现有 React、Next.js 或 Node.js 应用，或独立为端点。部署助手可一键将智能体与工作流打包为基于 Hono 的 Node.js 服务，或部署到 Vercel、Cloudflare Workers、Netlify 等无服务器平台。</li>
+					<li><strong><a href="/docs/evals/overview.mdx">评估</a></strong>：Mastra 提供自动化评估指标，结合模型打分、规则与统计方法，评估 LLM 输出；内置毒性、偏见、相关性、事实准确性等指标，也支持自定义评估。</li>
+					<li><strong><a href="/docs/observability/overview.mdx">可观测</a></strong>：Mastra 提供专为 AI 设计的链路追踪，监控 LLM 操作、智能体决策与工具执行。通过原生导出器接入 Langfuse、Braintrust 与 Mastra Cloud，跟踪 token 用量、延迟与会话流；结构化日志带来额外调试能力，实现全方位监控。</li>
+				</ul>
+			</article>
 		</main>
 		<Footer />
 	</body>

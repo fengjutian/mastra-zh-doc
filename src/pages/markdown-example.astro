@@ -1,0 +1,107 @@
+---
+import BaseHead from '../components/BaseHead.astro';
+import Footer from '../components/Footer.astro';
+import Header from '../components/Header.astro';
+import { marked } from 'marked';
+
+// 示例：在Astro组件中使用Markdown的方法
+
+// 方法1: 直接使用HTML (最常用)
+// 这是你在index.astro中看到的方式，直接使用HTML标签
+
+// 方法2: 使用marked等库将Markdown字符串转换为HTML
+const markdownContent = `# Markdown示例
+
+这是使用**marked**库渲染的Markdown内容。
+
+## 特性
+- 支持标题、列表
+- 支持粗体、斜体
+- 支持[链接](https://example.com)
+`;
+
+const renderedHtml = marked(markdownContent);
+
+// 方法3: 从content集合加载Markdown文件（推荐用于博客等内容）
+// 需要在content.config.ts中配置，然后使用import { getEntry } from 'astro:content';
+---
+
+<!doctype html>
+<html lang="zh-CN">
+	<head>
+		<BaseHead title="Astro中使用Markdown示例" description="展示在Astro中使用Markdown的多种方法" />
+		<script is:inline>
+			// 确保marked在客户端也能工作
+			window.marked = window.marked || {};
+		</script>
+	</head>
+	<body>
+		<Header />
+		<main>
+			<h1>Astro中使用Markdown的方法</h1>
+			
+			<section>
+				<h2>方法1: 直接使用HTML</h2>
+				<p>这是最简单直接的方法，在Astro组件的HTML部分直接使用HTML标签。</p>
+				<h3>优点:</h3>
+				<ul>
+					<li>不需要额外配置</li>
+					<li>性能最好</li>
+					<li>完全控制HTML结构</li>
+				</ul>
+			</section>
+
+			<section>
+				<h2>方法2: 使用Markdown解析库</h2>
+				<p>使用marked等库将Markdown字符串转换为HTML并在组件中渲染。</p>
+				<div set:html={renderedHtml}></div>
+				<h3>使用步骤:</h3>
+				<ol>
+					<li>安装marked: <code>npm install marked</code> 或 <code>pnpm add marked</code></li>
+					<li>在组件中导入: <code>import { marked } from 'marked';</code></li>
+					<li>转换Markdown: <code>const html = marked(markdownString);</code></li>
+					<li>渲染HTML: <code>&lt;div set:html={html}&gt;&lt;/div&gt;</code></li>
+				</ol>
+			</section>
+
+			<section>
+				<h2>方法3: 使用Astro Content Collections</h2>
+				<p>这是Astro推荐的内容管理方式，适合博客文章、文档等。</p>
+				<h3>使用步骤:</h3>
+				<ol>
+					<li>在<code>src/content/</code>下创建集合目录（如<code>blog</code>）</li>
+					<li>在<code>content.config.ts</code>中配置集合</li>
+					<li>在组件中使用<code>import { getEntry } from 'astro:content';</code>加载内容</li>
+				</ol>
+				<p>示例代码:</p>
+				<pre><code>// 页面组件中
+import { getEntry } from 'astro:content';
+
+const entry = await getEntry('blog', 'my-post');
+const { Content } = await entry.render();
+
+// 然后在HTML中使用
+&lt;article&gt;&lt;Content /&gt;&lt;/article&gt;</code></pre>
+			</section>
+
+			<section>
+				<h2>方法4: 使用MDX文件</h2>
+				<p>Astro支持直接导入和使用MDX文件，允许在Markdown中使用JSX组件。</p>
+				<h3>使用步骤:</h3>
+				<ol>
+					<li>确保安装了<code>@astrojs/mdx</code>集成</li>
+					<li>在<code>astro.config.mjs</code>中配置MDX集成</li>
+					<li>创建<code>.mdx</code>文件</li>
+					<li>在Astro组件中导入并使用</li>
+				</ol>
+				<p>示例代码:</p>
+				<pre><code>// 导入MDX文件
+import MyMdxFile from '../content/my-content.mdx';
+
+// 在HTML中使用
+&lt;MyMdxFile /&gt;</code></pre>
+			</section>
+		</main>
+		<Footer />
+	</body>
+</html>

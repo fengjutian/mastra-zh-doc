@@ -7,10 +7,16 @@ import Footer from '../../components/Footer.astro';
 // 预生成所有文档路径
 export async function getStaticPaths() {
   const docsEntries = await getCollection('docs');
+  
   const paths = docsEntries.map(doc => {
-    const docSlug = doc.id.replace(/^.*\//, '').replace(/\.(md|mdx)$/, '');
+    // 确保我们处理的是字符串格式的ID
+    const docId = typeof doc.id === 'string' ? doc.id : String(doc.id);
+    // 移除文件扩展名
+    const docPath = docId.replace(/\.(md|mdx)$/, '');
+    // 对于 [...doc] 路由，Astro要求将嵌套路径拆分为数组
+    // 但根据Astro的最新行为，我们需要传递路径字符串，Astro会自动处理
     return {
-      params: { doc: docSlug },
+      params: { doc: docPath },
       props: doc
     };
   });
@@ -23,17 +29,17 @@ const currentDoc = Astro.props;
 const { Content } = await render(currentDoc);
 
 // 获取所有文档用于侧边栏
-const docsEntries = await getCollection('docs');
+const sidebarDocsEntries = await getCollection('docs');
 
 // 按分类和侧边栏顺序组织文档
-const docsByCategory = docsEntries.reduce((acc, doc) => {
+const docsByCategory = sidebarDocsEntries.reduce((acc, doc) => {
   const category = doc.data.category || '未分类';
   if (!acc[category]) {
     acc[category] = [];
   }
   acc[category].push(doc);
   return acc;
-}, {} as Record<string, typeof docsEntries>);
+}, {} as Record<string, CollectionEntry<'docs'>[]>);
 
 // 对每个分类下的文档按侧边栏顺序排序
 Object.keys(docsByCategory).forEach(category => {
@@ -42,8 +48,13 @@ Object.keys(docsByCategory).forEach(category => {
   );
 });
 
+// 用于检查是否有文档的备用逻辑
+const hasDocs = sidebarDocsEntries.length > 0;
+
 // 获取动态路由参数（用于面包屑等）
-const { doc } = Astro.params;
+// 注意：对于 [...doc] 路由，Astro.params.doc 可能是一个数组或字符串
+// 如果是数组，需要将其转换为字符串路径
+const doc = Array.isArray(Astro.params.doc) ? Astro.params.doc.join('/') : Astro.params.doc;
 
 // 处理当前文档标题和描述
 let currentTitle = 'Mastra 文档中心';
@@ -60,7 +71,6 @@ if (currentDoc) {
     <BaseHead title={currentTitle} description={currentDescription} />
     <style>
       /* 文档页面布局 - 基于全局样式调整 */
-
       main {
         width: 1620px;
         max-width: calc(100% - 2em);
@@ -182,21 +192,27 @@ if (currentDoc) {
               <div key={category}>
                 {category !== '未分类' && <h3>{category}</h3>}
                 <ul>
-                  {docs.map(doc => (
-                    <li key={doc.id}>
-                      <a 
-                        href={`/docs/${doc.id.replace(/^.*\//, '').replace(/\.(md|mdx)$/, '')}`} 
-                        class={currentDoc?.id === doc.id ? 'active' : ''}
-                      >
-                        {doc.data.title}
-                      </a>
-                    </li>
-                  ))}
+                  {docs.map(doc => {
+                    // 确保doc.id是字符串格式
+                    const docIdStr = typeof doc.id === 'string' ? doc.id : String(doc.id);
+                    const docPath = docIdStr.replace(/\.(md|mdx)$/, '');
+                    // 生成正确的嵌套路径链接
+                    return (
+                      <li key={doc.id}>
+                        <a 
+                          href={`/docs/${docPath}`} 
+                          class={currentDoc?.id === doc.id ? 'active' : ''}
+                        >
+                          {doc.data.title}
+                        </a>
+                      </li>
+                    );
+                  })}
                 </ul>
               </div>
             ))}
           
-          {docsEntries.length === 0 && (
+          {!hasDocs && (
             <p style="color: #666; font-style: italic;">暂无文档内容</p>
           )}
         </div>

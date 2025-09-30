@@ -1,0 +1,58 @@
+---
+title: "项目结构"
+description: "Mastra 是一个 TypeScript 智能体框架，帮助你快速构建 AI 应用与功能。它提供你所需的原子能力：工作流、智能体、RAG、集成、同步与评估。"
+sidebar_order: 1
+category: "Mastra"
+---
+
+# 项目结构
+
+本页提供在 Mastra 中组织文件夹和文件的建议。Mastra 是一个模块化框架，你可以单独或联合使用其各个模块。
+
+你可以将所有代码写在一个文件中，也可以把每个 agent、tool 和 workflow 分别放在不同文件里。我们不强制要求某一种文件结构，但推荐一些最佳实践，而且 CLI 会为你生成一个合理的初始结构。
+
+## 示例项目结构
+
+使用 CLI 创建的默认项目示例结构如下：
+
+```
+* src
+  * mastra
+    * agents
+      * agent-name.ts
+    * tools
+      * tool-name.ts
+    * workflows
+      * workflow-name.ts
+    * index.ts
+* .env
+* package.json
+* tsconfig.json
+```
+
+### 顶层文件夹（Top-level Folders）
+
+| 文件夹                    | 说明              |
+| ---------------------- | --------------- |
+| `src/mastra`           | 核心程序所在目录        |
+| `src/mastra/agents`    | 存放 agent 的配置和定义 |
+| `src/mastra/tools`     | 自定义工具（tool）定义   |
+| `src/mastra/workflows` | workflow 的定义    |
+
+### 顶层文件（Top-level Files）
+
+| 文件                    | 说明                  |
+| --------------------- | ------------------- |
+| `src/mastra/index.ts` | Mastra 的主配置文件       |
+| `.env`                | 环境变量配置              |
+| `package.json`        | Node.js 项目信息、脚本、依赖等 |
+| `tsconfig.json`       | TypeScript 的编译器配置   |
+
+## 下一步
+
+- [安装](/docs/mastra/mastra-getting-started)  
+- [MCP 服务](/docs/deployment/mastra-cloud)
+
+
+
+

@@ -6,6 +6,7 @@ import Footer from '../../components/Footer.astro';
 
 // 获取所有文档
 const docs = await getCollection('docs');
+console.log(123456, docs);
 ---
 
 <!DOCTYPE html>
@@ -81,12 +82,13 @@ const docs = await getCollection('docs');
         
         <div class="docs-grid">
           {docs.map(doc => {
-            const docSlug = doc.id.replace(/^.*\//, '').replace(/\.(md|mdx)$/, '');
+            // 移除文件扩展名，保留完整路径结构
+            const docPath = doc.id.replace(/\.(md|mdx)$/, '');
             return (
               <div class="doc-card" key={doc.id}>
-                <h3>{doc.data.title || docSlug}</h3>
+                <h2>{doc.data.title || docPath}</h2>
                 <p>{doc.data.description || '查看此文档以了解更多信息。'}</p>
-                <a href={`/docs/${docSlug}`}>查看文档</a>
+                <a href={`/docs/${docPath}`}>查看文档</a>
               </div>
             );
           })}

@@ -1,5 +1,6 @@
 ---
 import { getCollection } from 'astro:content';
+import BaseHead from '../../components/BaseHead.astro';
 import Header from '../../components/Header.astro';
 import Footer from '../../components/Footer.astro';
 
@@ -68,22 +69,18 @@ if (currentDoc) {
 
 <html lang="zh-CN">
   <head>
-    <meta charset="utf-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>{currentTitle}</title>
-    <meta name="description" content={currentDescription} />
+    <BaseHead title={currentTitle} description={currentDescription} />
     <style>
-      /* 文档页面布局 */
+      /* 文档页面布局 - 基于全局样式调整 */
       .docs-layout {
         display: flex;
         gap: 2rem;
         max-width: 1400px;
-        margin: 0 auto;
-        padding: 2rem;
+        margin: auto;
+        padding: 1em 1em 3em;
       }
       
-      /* 侧边栏样式 */
+      /* 侧边栏样式 - 保持功能同时使用全局变量 */
       .sidebar {
         width: 280px;
         flex-shrink: 0;
@@ -92,19 +89,20 @@ if (currentDoc) {
         max-height: calc(100vh - 4rem);
         overflow-y: auto;
         padding-right: 1rem;
+        font-size: 0.9rem;
       }
       
       .sidebar h2 {
-        font-size: 1.5rem;
         margin-bottom: 1rem;
-        color: #333;
+        color: rgb(var(--black));
+        font-size: 1.5em;
       }
       
       .sidebar h3 {
-        font-size: 1.125rem;
         margin: 1.5rem 0 0.75rem 0;
-        color: #555;
+        color: rgb(var(--gray));
         font-weight: 500;
+        font-size: 1.1em;
       }
       
       .sidebar ul {
@@ -114,100 +112,37 @@ if (currentDoc) {
       }
       
       .sidebar li {
-        margin: 0.5rem 0;
+        margin: 0.35rem 0;
       }
       
       .sidebar a {
         display: block;
         padding: 0.5rem;
-        color: #333;
+        color: rgb(var(--gray-dark));
         text-decoration: none;
         border-radius: 0.375rem;
         transition: background-color 0.2s;
       }
       
       .sidebar a:hover {
-        background-color: #f0f0f0;
+        background-color: rgba(var(--gray-light), 70%);
       }
       
       .sidebar a.active {
-        background-color: #e6f2ff;
-        color: #0066cc;
+        background-color: rgba(35, 55, 255, 10%);
+        color: var(--accent);
         font-weight: 500;
       }
       
-      /* 内容区域样式 */
+      /* 内容区域样式 - 保持与全局样式一致 */
       .content {
         flex: 1;
         max-width: 800px;
       }
       
-      .content h1 {
-        font-size: 2rem;
-        margin-bottom: 1rem;
-        color: #222;
-      }
-      
-      .content h2 {
-        font-size: 1.5rem;
-        margin: 2rem 0 1rem 0;
-        padding-bottom: 0.5rem;
-        border-bottom: 1px solid #eaeaea;
-        color: #333;
-      }
-      
-      .content h3 {
-        font-size: 1.25rem;
-        margin: 1.5rem 0 0.75rem 0;
-        color: #444;
-      }
-      
-      .content p {
-        margin: 1rem 0;
-        line-height: 1.6;
-        color: #555;
-      }
-      
-      .content ul,
-      .content ol {
-        margin: 1rem 0;
-        padding-left: 1.5rem;
-      }
-      
-      .content li {
-        margin: 0.5rem 0;
-        color: #555;
-      }
-      
-      .content code {
-        font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
-        background-color: #f5f5f5;
-        padding: 0.2em 0.4em;
-        border-radius: 0.25em;
-        font-size: 0.9em;
-      }
-      
-      .content pre {
-        background-color: #f8f8f8;
-        padding: 1rem;
-        border-radius: 0.5rem;
-        overflow-x: auto;
-        margin: 1rem 0;
-      }
-      
-      .content pre code {
-        background-color: transparent;
-        padding: 0;
-        border-radius: 0;
-      }
-      
-      .content a {
-        color: #0066cc;
-        text-decoration: none;
-      }
-      
-      .content a:hover {
-        text-decoration: underline;
+      .content .description {
+        margin-bottom: 2em;
+        color: rgb(var(--gray));
       }
       
       /* 响应式设计 */
@@ -229,20 +164,6 @@ if (currentDoc) {
           max-height: none;
           overflow-y: visible;
           padding-right: 0;
-          margin-bottom: 1rem;
-        }
-        
-        .sidebar-toggle {
-          display: block;
-          width: 100%;
-          padding: 0.75rem;
-          background-color: #f8f8f8;
-          border: none;
-          border-radius: 0.5rem;
-          font-size: 1rem;
-          font-weight: 500;
-          cursor: pointer;
-          text-align: left;
           margin-bottom: 1rem;
         }
       }

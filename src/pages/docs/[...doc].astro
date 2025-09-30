@@ -176,23 +176,30 @@ if (currentDoc) {
         <!-- 侧边栏目录 -->
         <div class="sidebar">
           <h2 style="margin-top: 0;">Mastra 文档目录</h2>
-          {Object.entries(docsByCategory).map(([category, docs]) => (
-            <div key={category}>
-              {category !== '未分类' && <h3>{category}</h3>}
-              <ul>
-                {docs.map(doc => (
-                  <li key={doc.id}>
-                    <a 
-                      href={`/docs/${doc.id.replace(/^.*\//, '').replace(/\.(md|mdx)$/, '')}`} 
-                      class={currentDoc?.id === doc.id ? 'active' : ''}
-                    >
-                      {doc.data.title}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
+          {Object.entries(docsByCategory)
+            // 分类排序：'Mastra' 排在最前面，然后是其他分类
+            .sort(([categoryA], [categoryB]) => {
+              if (categoryA === 'Mastra') return -1;
+              if (categoryB === 'Mastra') return 1;
+              return categoryA.localeCompare(categoryB);
+            })
+            .map(([category, docs]) => (
+              <div key={category}>
+                {category !== '未分类' && <h3>{category}</h3>}
+                <ul>
+                  {docs.map(doc => (
+                    <li key={doc.id}>
+                      <a 
+                        href={`/docs/${doc.id.replace(/^.*\//, '').replace(/\.(md|mdx)$/, '')}`} 
+                        class={currentDoc?.id === doc.id ? 'active' : ''}
+                      >
+                        {doc.data.title}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
           
           {docsEntries.length === 0 && (
             <p style="color: #666; font-style: italic;">暂无文档内容</p>

@@ -1,5 +1,5 @@
 ---
-import { getCollection } from 'astro:content';
+import { type CollectionEntry, getCollection, render } from 'astro:content';
 import BaseHead from '../../components/BaseHead.astro';
 import Header from '../../components/Header.astro';
 import Footer from '../../components/Footer.astro';
@@ -11,13 +11,18 @@ export async function getStaticPaths() {
     const docSlug = doc.id.replace(/^.*\//, '').replace(/\.(md|mdx)$/, '');
     return {
       params: { doc: docSlug },
-      props: { docId: doc.id }
+      props: doc
     };
   });
   return paths;
 }
 
-// 获取所有文档
+type Props = CollectionEntry<'docs'>;
+
+const currentDoc = Astro.props;
+const { Content } = await render(currentDoc);
+
+// 获取所有文档用于侧边栏
 const docsEntries = await getCollection('docs');
 
 // 按分类和侧边栏顺序组织文档
@@ -37,25 +42,8 @@ Object.keys(docsByCategory).forEach(category => {
   );
 });
 
-// 从props获取当前文档ID
-const { docId } = Astro.props;
-
-// 找到当前文档
-let currentDoc = undefined;
-if (docId) {
-  currentDoc = docsEntries.find(entry => entry.id === docId);
-}
-
 // 获取动态路由参数（用于面包屑等）
 const { doc } = Astro.params;
-
-// 如果没有指定文档，或者找不到对应文档，使用第一个文档作为默认
-if (!currentDoc && docsEntries.length > 0) {
-  // 找到侧边栏顺序最小的文档
-  currentDoc = docsEntries.reduce((min, doc) => 
-    ((doc.data.sidebar_order || 999) < (min.data.sidebar_order || 999)) ? doc : min
-  );
-}
 
 // 处理当前文档标题和描述
 let currentTitle = 'Mastra 文档中心';
@@ -72,6 +60,13 @@ if (currentDoc) {
     <BaseHead title={currentTitle} description={currentDescription} />
     <style>
       /* 文档页面布局 - 基于全局样式调整 */
+
+      main {
+        width: 1620px;
+        max-width: calc(100% - 2em);
+        margin: auto;
+        padding: 3em 1em;
+      }
       .docs-layout {
         display: flex;
         gap: 2rem;
@@ -214,7 +209,7 @@ if (currentDoc) {
               <p class="description" style="color: #666; font-size: 1.125rem; margin-bottom: 2rem;">
                 {currentDoc.data.description}
               </p>
-              <div set:html={currentDoc.body} />
+              <Content />
             </article>
           ) : (
             <div style="text-align: center; padding: 3rem 0;">

@@ -1,0 +1,92 @@
+---
+title: "智能体概述"
+description: "了解Mastra中的智能体概念、架构和使用方法"
+sidebar_order: 1
+category: "智能体"
+---
+
+# 智能体概述
+
+Mastra 智能体是一种能够执行任务、调用工具并与用户交互的 AI 实体。智能体可以具有记忆能力，能够根据历史对话和上下文做出决策。
+
+## 智能体架构
+
+Mastra 智能体由以下核心组件组成：
+
+- **模型接口**：连接底层 LLM 模型
+- **记忆系统**：存储和检索历史交互
+- **工具系统**：允许智能体执行外部操作
+- **决策引擎**：决定何时调用工具或直接回答用户
+
+## 基本使用方法
+
+### 创建智能体
+
+```typescript
+import { createAgent } from 'mastra';
+
+const agent = createAgent({
+  model: 'gpt-4',
+  systemPrompt: '你是一个帮助用户解答问题的助手',
+  tools: [/* 工具定义 */]
+});
+```
+
+### 与智能体对话
+
+```typescript
+const response = await agent.chat({
+  message: '请解释什么是机器学习？'
+});
+
+console.log(response.content);
+```
+
+## 智能体记忆
+
+Mastra 智能体支持多种记忆策略：
+
+- **最近性**：保留最近的交互记录
+- **语义相似度**：基于语义相关性检索记忆
+- **会话线程**：按会话组织记忆
+
+## 工具调用
+
+智能体可以调用自定义工具来执行特定任务：
+
+```typescript
+const calculatorTool = {
+  name: 'calculator',
+  description: '计算数学表达式',
+  parameters: {
+    type: 'object',
+    properties: {
+      expression: {
+        type: 'string',
+        description: '要计算的数学表达式'
+      }
+    },
+    required: ['expression']
+  },
+  execute: async ({ expression }) => {
+    try {
+      // 注意：在实际应用中使用更安全的计算方法
+      return eval(expression);
+    } catch (error) {
+      return `计算错误: ${error.message}`;
+    }
+  }
+};
+
+// 将工具添加到智能体
+const agentWithTools = createAgent({
+  model: 'gpt-4',
+  tools: [calculatorTool]
+});
+```
+
+## 下一步
+
+- 了解[智能体记忆](./agent-memory.mdx)的详细配置
+- 学习如何创建[自定义工具](./custom-tools.mdx)
+- 查看[智能体开发游乐场](../server-db/local-dev-playground.mdx)

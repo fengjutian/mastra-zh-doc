@@ -1,0 +1,128 @@
+---
+title: "工作流概述"
+description: "了解Mastra中的工作流概念、设计思想和实现方法"
+sidebar_order: 1
+category: "工作流"
+---
+
+# 工作流概述
+
+Mastra 工作流提供了一种确定性的方式来组织和执行 LLM 调用。工作流基于图的概念，允许您定义离散的步骤，并控制它们之间的执行流程。
+
+## 工作流设计理念
+
+工作流旨在解决以下问题：
+
+- **可预测性**：确保 AI 处理过程的一致性和可重现性
+- **可观测性**：跟踪每个步骤的输入和输出
+- **模块化**：将复杂任务分解为可管理的步骤
+- **可组合性**：通过组合简单步骤创建复杂流程
+
+## 基本概念
+
+### 步骤（Steps）
+
+工作流中的基本执行单元，可以是：
+
+- **模型调用**：使用 LLM 生成内容
+- **函数执行**：运行自定义代码
+- **条件分支**：根据输入决定执行路径
+- **并行执行**：同时运行多个子工作流
+
+### 控制流
+
+Mastra 工作流提供简洁的控制流语法：
+
+- `.then()`：顺序执行步骤
+- `.branch()`：条件分支执行
+- `.parallel()`：并行执行步骤
+
+## 创建简单工作流
+
+```typescript
+import { createWorkflow } from 'mastra';
+
+const workflow = createWorkflow()
+  .step('分析问题', {
+    model: 'gpt-4',
+    prompt: '分析以下问题并识别关键信息：{{input.question}}',
+  })
+  .then('生成回答', {
+    model: 'gpt-4',
+    prompt: '基于分析结果生成详细回答：\n{{steps.分析问题.output.content}}',
+  });
+
+// 执行工作流
+const result = await workflow.run({
+  question: '什么是 Mastra？'
+});
+
+console.log(result.steps.生成回答.output.content);
+```
+
+## 工作流特性
+
+### 输入/输出映射
+
+步骤可以访问全局输入和先前步骤的输出：
+
+```typescript
+const workflow = createWorkflow()
+  .step('步骤1', {
+    model: 'gpt-4',
+    prompt: '处理输入：{{input.value}}',
+  })
+  .then('步骤2', {
+    model: 'gpt-4',
+    prompt: '使用步骤1的结果：{{steps.步骤1.output.content}}',
+  });
+```
+
+### 条件分支
+
+根据条件决定执行路径：
+
+```typescript
+const workflow = createWorkflow()
+  .step('分类', {
+    model: 'gpt-4',
+    prompt: '将问题分类为"技术"或"非技术"：{{input.question}}',
+  })
+  .branch('决定路径', {
+    condition: (state) => state.steps.分类.output.content.includes('技术'),
+    then: createWorkflow().step('技术回答', { /* 技术回答配置 */ }),
+    else: createWorkflow().step('非技术回答', { /* 非技术回答配置 */ }),
+  });
+```
+
+### 并行执行
+
+同时运行多个子工作流：
+
+```typescript
+const workflow = createWorkflow()
+  .parallel('并行分析', [
+    createWorkflow().step('技术分析', { /* 技术分析配置 */ }),
+    createWorkflow().step('用户体验分析', { /* UX分析配置 */ }),
+    createWorkflow().step('商业分析', { /* 商业分析配置 */ }),
+  ])
+  .then('汇总结果', {
+    model: 'gpt-4',
+    prompt: '汇总以下分析结果：\n技术：{{steps.并行分析.技术分析.output.content}}\nUX：{{steps.并行分析.用户体验分析.output.content}}\n商业：{{steps.并行分析.商业分析.output.content}}',
+  });
+```
+
+## 可观测性
+
+工作流提供完整的执行跟踪，记录每个步骤的：
+
+- 输入参数
+- 执行时间
+- 输出结果
+- 任何错误或警告
+
+## 下一步
+
+- 学习如何构建[复杂工作流](./complex-workflows.mdx)
+- 了解工作流的[错误处理](./error-handling.mdx)机制
+- 探索工作流与[智能体的集成](./agents-integration.mdx)

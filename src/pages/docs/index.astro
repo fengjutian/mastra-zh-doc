@@ -1,0 +1,290 @@
+---
+import { getCollection } from 'astro:content';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+
+// 获取URL路径参数
+const { doc } = Astro.params;
+
+// 获取所有文档
+const docsEntries = await getCollection('docs');
+
+// 按分类和侧边栏顺序组织文档
+const docsByCategory = docsEntries.reduce((acc, doc) => {
+  const category = doc.data.category || '未分类';
+  if (!acc[category]) {
+    acc[category] = [];
+  }
+  acc[category].push(doc);
+  return acc;
+}, {} as Record<string, typeof docsEntries>);
+
+// 对每个分类下的文档按侧边栏顺序排序
+Object.keys(docsByCategory).forEach(category => {
+  docsByCategory[category].sort((a, b) => 
+    (a.data.sidebar_order || 999) - (b.data.sidebar_order || 999)
+  );
+});
+
+// 找到当前文档
+let currentDoc = undefined;
+if (doc) {
+  // 查找与URL参数匹配的文档
+  currentDoc = docsEntries.find(entry => 
+    entry.id.includes(doc) || 
+    entry.id.replace(/^.*\//, '').replace(/\.(md|mdx)$/, '') === doc
+  );
+}
+
+// 如果没有指定文档，或者找不到对应文档，使用第一个文档作为默认
+if (!currentDoc && docsEntries.length > 0) {
+  // 找到侧边栏顺序最小的文档
+  currentDoc = docsEntries.reduce((min, doc) => 
+    ((doc.data.sidebar_order || 999) < (min.data.sidebar_order || 999)) ? doc : min
+  );
+}
+
+// 处理当前文档标题和描述
+let currentTitle = 'Mastra 文档中心';
+let currentDescription = 'Mastra 文档中心';
+
+if (currentDoc) {
+  currentTitle = currentDoc.data.title || currentTitle;
+  currentDescription = currentDoc.data.description || currentDescription;
+}
+---
+
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{currentTitle}</title>
+    <meta name="description" content={currentDescription} />
+    <style>
+      /* 文档页面布局 */
+      .docs-layout {
+        display: flex;
+        gap: 2rem;
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 2rem;
+      }
+      
+      /* 侧边栏样式 */
+      .sidebar {
+        width: 280px;
+        flex-shrink: 0;
+        position: sticky;
+        top: 2rem;
+        max-height: calc(100vh - 4rem);
+        overflow-y: auto;
+        padding-right: 1rem;
+      }
+      
+      .sidebar h2 {
+        font-size: 1.5rem;
+        margin-bottom: 1rem;
+        color: #333;
+      }
+      
+      .sidebar h3 {
+        font-size: 1.125rem;
+        margin: 1.5rem 0 0.75rem 0;
+        color: #555;
+        font-weight: 500;
+      }
+      
+      .sidebar ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+      }
+      
+      .sidebar li {
+        margin: 0.5rem 0;
+      }
+      
+      .sidebar a {
+        display: block;
+        padding: 0.5rem;
+        color: #333;
+        text-decoration: none;
+        border-radius: 0.375rem;
+        transition: background-color 0.2s;
+      }
+      
+      .sidebar a:hover {
+        background-color: #f0f0f0;
+      }
+      
+      .sidebar a.active {
+        background-color: #e6f2ff;
+        color: #0066cc;
+        font-weight: 500;
+      }
+      
+      /* 内容区域样式 */
+      .content {
+        flex: 1;
+        max-width: 800px;
+      }
+      
+      .content h1 {
+        font-size: 2rem;
+        margin-bottom: 1rem;
+        color: #222;
+      }
+      
+      .content h2 {
+        font-size: 1.5rem;
+        margin: 2rem 0 1rem 0;
+        padding-bottom: 0.5rem;
+        border-bottom: 1px solid #eaeaea;
+        color: #333;
+      }
+      
+      .content h3 {
+        font-size: 1.25rem;
+        margin: 1.5rem 0 0.75rem 0;
+        color: #444;
+      }
+      
+      .content p {
+        margin: 1rem 0;
+        line-height: 1.6;
+        color: #555;
+      }
+      
+      .content ul,
+      .content ol {
+        margin: 1rem 0;
+        padding-left: 1.5rem;
+      }
+      
+      .content li {
+        margin: 0.5rem 0;
+        color: #555;
+      }
+      
+      .content code {
+        font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+        background-color: #f5f5f5;
+        padding: 0.2em 0.4em;
+        border-radius: 0.25em;
+        font-size: 0.9em;
+      }
+      
+      .content pre {
+        background-color: #f8f8f8;
+        padding: 1rem;
+        border-radius: 0.5rem;
+        overflow-x: auto;
+        margin: 1rem 0;
+      }
+      
+      .content pre code {
+        background-color: transparent;
+        padding: 0;
+        border-radius: 0;
+      }
+      
+      .content a {
+        color: #0066cc;
+        text-decoration: none;
+      }
+      
+      .content a:hover {
+        text-decoration: underline;
+      }
+      
+      /* 响应式设计 */
+      @media (max-width: 1024px) {
+        .sidebar {
+          width: 240px;
+        }
+      }
+      
+      @media (max-width: 768px) {
+        .docs-layout {
+          flex-direction: column;
+          gap: 1rem;
+        }
+        
+        .sidebar {
+          width: 100%;
+          position: static;
+          max-height: none;
+          overflow-y: visible;
+          padding-right: 0;
+          margin-bottom: 1rem;
+        }
+        
+        .sidebar-toggle {
+          display: block;
+          width: 100%;
+          padding: 0.75rem;
+          background-color: #f8f8f8;
+          border: none;
+          border-radius: 0.5rem;
+          font-size: 1rem;
+          font-weight: 500;
+          cursor: pointer;
+          text-align: left;
+          margin-bottom: 1rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <Header />
+    <main>
+      <div class="docs-layout">
+        <!-- 侧边栏目录 -->
+        <div class="sidebar">
+          <h2 style="margin-top: 0;">Mastra 文档目录</h2>
+          {Object.entries(docsByCategory).map(([category, docs]) => (
+            <div key={category}>
+              {category !== '未分类' && <h3>{category}</h3>}
+              <ul>
+                {docs.map(doc => (
+                  <li key={doc.id}>
+                    <a 
+                      href={`/docs/${doc.id.replace(/^.*\//, '').replace(/\.(md|mdx)$/, '')}`} 
+                      class={currentDoc?.id === doc.id ? 'active' : ''}
+                    >
+                      {doc.data.title}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+          
+          {docsEntries.length === 0 && (
+            <p style="color: #666; font-style: italic;">暂无文档内容</p>
+          )}
+        </div>
+        
+        <!-- 主要内容区域 -->
+        <div class="content">
+          {currentDoc ? (
+            <article>
+              <h1>{currentDoc.data.title}</h1>
+              <p class="description" style="color: #666; font-size: 1.125rem; margin-bottom: 2rem;">
+                {currentDoc.data.description}
+              </p>
+              <div set:html={currentDoc.body} />
+            </article>
+          ) : (
+            <div style="text-align: center; padding: 3rem 0;">
+              <h2>欢迎使用 Mastra 文档</h2>
+              <p>请在左侧选择一个文档查看详情</p>
+            </div>
+          )}
+        </div>
+      </div>
+    </main>
+    <Footer />
+  </body>
+</html>

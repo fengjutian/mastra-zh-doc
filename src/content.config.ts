@@ -16,4 +16,18 @@ const blog = defineCollection({
 		}),
 });
 
-export const collections = { blog };
+const docs = defineCollection({
+	// Load Markdown and MDX files in the `src/content/docs/` directory.
+	loader: glob({ base: './src/content/docs', pattern: '**/*.{md,mdx}' }),
+	// Type-check frontmatter using a schema
+	schema: z.object({
+			title: z.string(),
+			description: z.string(),
+			// 可选的侧边栏顺序
+			sidebar_order: z.number().optional(),
+			// 可选的父分类
+			category: z.string().optional(),
+		})
+});
+
+export const collections = { blog, docs };

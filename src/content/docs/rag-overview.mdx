@@ -1,0 +1,155 @@
+---
+title: "检索增强生成(RAG)概述"
+description: "了解Mastra中的RAG技术、实现方法和最佳实践"
+sidebar_order: 1
+category: "RAG"
+---
+
+# 检索增强生成(RAG)概述
+
+检索增强生成（Retrieval-Augmented Generation，简称 RAG）是一种将外部知识库与 LLM 结合的技术，使模型能够基于特定领域的数据生成更准确、更相关的回答。
+
+## RAG 工作原理
+
+Mastra 的 RAG 系统包含以下核心环节：
+
+1. **文档处理**：将文档转换为适合检索的格式
+2. **嵌入生成**：为文本块创建向量表示
+3. **向量存储**：将嵌入存储到向量数据库
+4. **检索**：基于用户查询查找相关文档
+5. **生成**：结合检索到的信息生成回答
+
+## 基本使用方法
+
+### 1. 初始化向量存储
+
+```typescript
+import { createVectorStore } from 'mastra';
+
+const vectorStore = createVectorStore({
+  provider: 'pinecone', // 或其他支持的向量数据库
+  config: {
+    apiKey: process.env.PINECONE_API_KEY,
+    environment: process.env.PINECONE_ENVIRONMENT,
+    indexName: 'mastra-docs'
+  },
+  embedding: {
+    provider: 'openai',
+    model: 'text-embedding-ada-002'
+  }
+});
+```
+
+### 2. 处理和存储文档
+
+```typescript
+import { processDocuments } from 'mastra';
+
+// 处理文档
+const documents = [
+  { content: 'Mastra 是一个 TypeScript 智能体框架...', metadata: { source: 'docs' } },
+  { content: '工作流允许定义确定性的 AI 处理流程...', metadata: { source: 'docs' } }
+];
+
+// 分块并添加到向量存储
+await processDocuments({
+  documents,
+  vectorStore,
+  chunkSize: 512,
+  chunkOverlap: 50
+});
+```
+
+### 3. 执行检索增强查询
+
+```typescript
+import { createRAGQuery } from 'mastra';
+
+const ragQuery = createRAGQuery({
+  vectorStore,
+  model: 'gpt-4',
+  maxRetrievals: 5, // 检索的最大文档数量
+  similarityThreshold: 0.7 // 相似度阈值
+});
+
+const response = await ragQuery.run({
+  query: '什么是 Mastra 工作流？',
+  systemPrompt: '基于提供的文档，以友好的方式回答用户问题。'
+});
+
+console.log(response.content);
+```
+
+## 文档处理选项
+
+Mastra 支持多种文档格式和处理选项：
+
+### 支持的格式
+
+- **纯文本**：`.txt` 文件
+- **Markdown**：`.md` 文件
+- **HTML**：`.html` 文件
+- **JSON**：`.json` 文件
+- **PDF**：`.pdf` 文件（需要额外依赖）
+
+### 分块策略
+
+- **固定大小**：将文档分割成固定大小的块
+- **语义分块**：基于句子或段落边界分割
+- **递归分块**：递归地将大文本分割成更小的块
+
+## 高级功能
+
+### 元数据过滤
+
+根据元数据过滤检索结果：
+
+```typescript
+const response = await ragQuery.run({
+  query: '如何使用工作流？',
+  filter: {
+    source: 'official-docs',
+    category: 'workflow'
+  }
+});
+```
+
+### 混合检索
+
+结合关键词和语义检索：
+
+```typescript
+const hybridRagQuery = createRAGQuery({
+  vectorStore,
+  model: 'gpt-4',
+  retrievalMode: 'hybrid', // 混合检索模式
+  keywordWeight: 0.3, // 关键词检索权重
+  semanticWeight: 0.7 // 语义检索权重
+});
+```
+
+### 重排序
+
+对检索结果进行重排序以提高相关性：
+
+```typescript
+const response = await ragQuery.run({
+  query: 'Mastra 部署选项',
+  reRank: true,
+  reRankModel: 'cross-encoder/stsb-roberta-base'
+});
+```
+
+## 最佳实践
+
+1. **文档质量**：确保知识库中的文档准确、全面且最新
+2. **分块大小**：根据文档类型调整分块大小，通常在 500-1000 tokens 之间
+3. **嵌入模型**：选择适合您数据类型的嵌入模型
+4. **评估**：定期评估 RAG 系统的性能，包括相关性和准确性
+5. **监控**：跟踪检索质量和生成质量，及时调整系统参数
+
+## 下一步
+
+- 学习[向量存储配置](./vector-stores.mdx)的详细选项
+- 探索[高级检索技术](./advanced-retrieval.mdx)
+- 了解如何[评估RAG系统](./rag-evaluation.mdx)的性能

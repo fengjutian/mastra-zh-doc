@@ -24,6 +24,7 @@ const renderedHtml = marked(markdownContent);
 
 // 方法3: 从content集合加载Markdown文件（推荐用于博客等内容）
 // 需要在content.config.ts中配置，然后使用import { getEntry } from 'astro:content';
+// 注意：以下只是示例代码，不会实际执行
 ---
 
 <!doctype html>
@@ -58,9 +59,9 @@ const renderedHtml = marked(markdownContent);
 				<h3>使用步骤:</h3>
 				<ol>
 					<li>安装marked: <code>npm install marked</code> 或 <code>pnpm add marked</code></li>
-					<li>在组件中导入: <code>import { marked } from 'marked';</code></li>
-					<li>转换Markdown: <code>const html = marked(markdownString);</code></li>
-					<li>渲染HTML: <code>&lt;div set:html={html}&gt;&lt;/div&gt;</code></li>
+					<li>在组件中导入marked库</li>
+					<li>将Markdown字符串转换为HTML</li>
+					<li>使用set:html指令渲染转换后的HTML</li>
 				</ol>
 			</section>
 
@@ -71,17 +72,15 @@ const renderedHtml = marked(markdownContent);
 				<ol>
 					<li>在<code>src/content/</code>下创建集合目录（如<code>blog</code>）</li>
 					<li>在<code>content.config.ts</code>中配置集合</li>
-					<li>在组件中使用<code>import { getEntry } from 'astro:content';</code>加载内容</li>
+					<li>在组件中使用内容集合API加载内容</li>
 				</ol>
-				<p>示例代码:</p>
-				<pre><code>// 页面组件中
-import { getEntry } from 'astro:content';
-
-const entry = await getEntry('blog', 'my-post');
-const { Content } = await entry.render();
-
-// 然后在HTML中使用
-&lt;article&gt;&lt;Content /&gt;&lt;/article&gt;</code></pre>
+				<p>参考步骤:</p>
+				<ul>
+					<li>导入内容集合相关API</li>
+					<li>获取特定的内容条目</li>
+					<li>渲染内容</li>
+					<li>在HTML中使用渲染组件</li>
+				</ul>
 			</section>
 
 			<section>

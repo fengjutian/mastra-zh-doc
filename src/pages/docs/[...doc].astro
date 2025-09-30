@@ -23,7 +23,7 @@ export async function getStaticPaths() {
   return paths;
 }
 
-type Props = CollectionEntry<'docs'>;
+// type Props = CollectionEntry<'docs'>;
 
 const currentDoc = Astro.props;
 const { Content, headings } = await render(currentDoc);
@@ -64,7 +64,7 @@ const hasDocs = sidebarDocsEntries.length > 0;
 // 获取动态路由参数（用于面包屑等）
 // 注意：对于 [...doc] 路由，Astro.params.doc 可能是一个数组或字符串
 // 如果是数组，需要将其转换为字符串路径
-const doc = Array.isArray(Astro.params.doc) ? Astro.params.doc.join('/') : Astro.params.doc;
+// const doc = Array.isArray(Astro.params.doc) ? Astro.params.doc.join('/') : Astro.params.doc;
 
 // 处理当前文档标题和描述
 let currentTitle = 'Mastra 文档中心';
@@ -290,7 +290,7 @@ if (currentDoc) {
               return categoryA.localeCompare(categoryB);
             })
             .map(([category, docs]) => (
-              <div key={category}>
+              <div>
                 {category !== '未分类' && <h3>{category}</h3>}
                 <ul>
                   {docs.map(doc => {
@@ -299,7 +299,7 @@ if (currentDoc) {
                     const docPath = docIdStr.replace(/\.(md|mdx)$/, '');
                     // 生成正确的嵌套路径链接
                     return (
-                      <li key={doc.id}>
+                      <li>
                         <a 
                           href={`/docs/${docPath}`} 
                           class={currentDoc?.id === doc.id ? 'active' : ''}
@@ -346,8 +346,8 @@ if (currentDoc) {
           <div class="right-sidebar">
             <h3>文档目录</h3>
             <ul class="toc-list">
-              {tableOfContents.map((item, index) => (
-                <li key={index} class={`toc-item-h${item.depth}`}>
+              {tableOfContents.map((item) => (
+                <li class={`toc-item-h${item.depth}`}>
                   <a href={`#${item.id}`}>{item.text}</a>
                 </li>
               ))}

@@ -1,6 +1,6 @@
 ---
 title: "Mastra MCP 文档服务器"
-description: ""
+description: "了解如何使用 Mastra MCP 文档服务器访问 Mastra 知识库"
 sidebar_order: 1
 category: "Mastra"
 ---
@@ -18,127 +18,95 @@ category: "Mastra"
 
 ## 如何使用
 
-安装之后，你就可以在 IDE 的对话中提出问题，就像 agent 天然“知道” Mastra 一样。
+```bash npm2yarn copy
+# 全局安装（推荐）
+npm install -g @mastra/mcp-docs-server
 
-### 示例问题：
+# 或作为项目依赖安装
+npm install @mastra/mcp-docs-server
+```
 
-* 给我的 agent 添加 **evals** 并写测试
-* 为我写一个 workflow 来执行任务 `[task]`
-* 新建一个工具，能让 agent 调用 `[第三方 API]`
-* Mastra 支持哪些语音 API？给我一个代码示例
-* Mastra 和 AI SDK 如何协作？在 React/Svelte 项目中怎么用？
-* 我遇到了 agent memory 的 bug，有哪些最近的修复？
-* Workflow 有哪些新功能？帮我把旧 workflow 升级
+安装完成后，运行：
+
+```bash copy
+mcp-docs-server
+```
+
+这将启动一个本地 MCP 服务器（默认端口：4111）。
 
 ---
 
-## 自动安装
+## 配置 MCP 客户端
 
-初始化新项目时，你可以：
-
-* 在交互式 CLI 提示中选择安装
-* 或者用 `-m` 参数直接安装 MCP Docs Server
-
----
-
-## 手动安装
-
-已有项目需要手动配置。不同 IDE 的配置方法：
-
-### Cursor
-
-修改 `.cursor/mcp.json`（或全局 `~/.cursor/mcp.json`）：
-
-```json
-{
-  "mcpServers": {
-    "mastra": {
-      "command": "npx",
-      "args": ["-y", "@mastra/mcp-docs-server"]
-    }
-  }
-}
-```
-
-### Windsurf
-
-配置文件路径：`~/.codeium/windsurf/mcp_config.json`
-配置格式与 Cursor 类似。
-
-### VSCode
-
-在项目根目录的 `.vscode/mcp.json`（或全局 `~/.vscode/mcp.json`）中：
-
-```json
-{
-  "servers": {
-    "mastra": {
-      "command": "npx",
-      "args": ["-y", "@mastra/mcp-docs-server"],
-      "type": "stdio"
-    }
-  }
-}
-```
-
-> ⚠️ Windows 上可能需要写成：
-> `"command": "cmd", "args": ["/c", "npx", "-y", "@mastra/mcp-docs-server"]`
-
-### Claude Code
-
-直接运行命令：
+要连接到这个服务器，你的 MCP 客户端需要指向以下 URL：
 
 ```
-claude mcp add mastra -- npx -y @mastra/mcp-docs-server
+http://localhost:4111/api/mcp/mcpServer/mcp
 ```
 
----
+例如，如果你使用 Mastra 的 `MCPClient`，可以这样配置：
 
-## 配置完成后
+```typescript copy
+import { MCPClient } from "@mastra/mcp";
 
-### 在 Cursor
-
-* 自动安装 → 打开时会提示启用 MCP server（左下角）
-* 手动安装 → 设置 → MCP → 开启 Mastra Docs server
-* 已打开的 agent 聊天需要重新开启
-
-### 在 Windsurf
-
-* 重启 Windsurf
-* 工具调用失败时，手动重启 MCP server
-* 注意：目前 Cursor 的 MCP 支持比 Windsurf 稳定
-
-### 在 VSCode
-
-1. 打开设置 → Chat → MCP → 启用
-2. MCP 仅在 **Agent 模式** 下可用
-3. 打开 `mcp.json`，点击 **Start** 启动 server
-4. 启动后在 Copilot 窗格 → **Tools** 可看到 Mastra 工具
+const client = new MCPClient({
+  servers: {
+    mastraDocs: {
+      url: new URL("http://localhost:4111/api/mcp/mcpServer/mcp"),
+    },
+  },
+});
+```
 
 ---
 
 ## 提供的工具
 
-启动 MCP Docs Server 后，agent 可以调用：
+服务器提供以下工具：
 
-* **Documentation（文档）**
-* **Examples（示例）**
-* **Blog posts（博客）**
-* **Package changes（更新日志）**
+* `search_docs`: 搜索 Mastra 文档
+* `get_doc`: 获取特定文档的内容
+* `list_documents`: 列出所有可用的文档
+* `get_examples`: 获取代码示例
 
 ---
 
-## 常见问题 (FAQ)
+## 自定义配置
 
-1. **Server 无法启动**
+你可以通过命令行参数自定义服务器的行为：
 
-   * 确认已安装 `npx`
-   * 检查配置文件语法
-   * 避免与其他 MCP server 冲突
-   * Windows 上要用 `cmd /c` 格式
+```bash copy
+mcp-docs-server --port 4200 --host 0.0.0.0
+```
 
-2. **工具调用失败**
+---
 
-   * 重启 MCP server / IDE
-   * 确保 IDE 版本最新
+## 与其他 MCP 工具结合使用
+
+MCP 文档服务器可以与其他 MCP 工具结合使用，为你的 AI 代理提供全方位的支持：
+
+```typescript copy
+import { Agent } from "@mastra/core/agent";
+import { openai } from "@ai-sdk/openai";
+import { MCPClient } from "@mastra/mcp";
+
+// 创建一个连接到多个 MCP 服务器的客户端
+const mcp = new MCPClient({
+  servers: {
+    mastraDocs: {
+      url: new URL("http://localhost:4111/api/mcp/mcpServer/mcp"),
+    },
+    // 可以添加其他 MCP 服务器
+  },
+});
+
+// 创建使用 MCP 工具的代理
+const agent = new Agent({
+  name: "Mastra Assistant",
+  instructions: `你是一个 Mastra 专家助手，可以访问 Mastra 文档。
+  使用 search_docs 工具查找相关信息，使用 get_doc 获取详细内容。`,
+  model: openai("gpt-4o"),
+  tools: async () => await mcp.getTools(),
+});
+```
 

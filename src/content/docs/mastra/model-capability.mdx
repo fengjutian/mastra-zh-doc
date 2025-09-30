@@ -1,6 +1,6 @@
 ---
 title: "模型能力（Model Capabilities）"
-description: ""
+description: "了解不同 AI 模型的能力对比，包括结构化输出、图像输入、工具使用等功能支持情况"
 sidebar_order: 1
 category: "Mastra"
 ---
@@ -18,48 +18,92 @@ AI 提供商支持不同的语言模型，各模型具有不同的能力。并�
 | xAI Grok             | xai           | XAI_API_KEY                  | grok-2-1212                               | —    | —    | ✅    | —      |
 | xAI Grok             | xai           | XAI_API_KEY                  | grok-2-vision-1212                        | ✅    | —    | ✅    | —      |
 | xAI Grok             | xai           | XAI_API_KEY                  | grok-beta                                 | —    | —    | ✅    | —      |
-| xAI Grok             | xai           | XAI_API_KEY                  | grok-vision-beta                          | ✅    | —    | ✅    | —      |
-| Vercel               | vercel        | VERCEL_API_KEY               | v0-1.0-md                                 | —    | —    | ✅    | —      |
-| OpenAI               | openai        | OPENAI_API_KEY               | gpt-4.1                                   | —    | —    | ✅    | —      |
-| OpenAI               | openai        | OPENAI_API_KEY               | gpt-4.1-mini                              | —    | —    | ✅    | —      |
-| OpenAI               | openai        | OPENAI_API_KEY               | gpt-4.1-nano                              | —    | —    | ✅    | —      |
-| OpenAI               | openai        | OPENAI_API_KEY               | gpt-4o                                    | —    | —    | ✅    | ✅      |
-| OpenAI               | openai        | OPENAI_API_KEY               | gpt-4o-mini                               | —    | —    | ✅    | ✅      |
-| OpenAI               | openai        | OPENAI_API_KEY               | gpt-4-turbo                               | —    | —    | ✅    | ✅      |
-| OpenAI               | openai        | OPENAI_API_KEY               | gpt-4                                     | —    | —    | ✅    | —      |
-| OpenAI               | openai        | OPENAI_API_KEY               | o3-mini                                   | —    | —    | ✅    | —      |
-| OpenAI               | openai        | OPENAI_API_KEY               | o3                                        | —    | —    | ✅    | —      |
-| OpenAI               | openai        | OPENAI_API_KEY               | o4-mini                                   | —    | —    | ✅    | —      |
-| OpenAI               | openai        | OPENAI_API_KEY               | o1                                        | —    | —    | ✅    | —      |
-| OpenAI               | openai        | OPENAI_API_KEY               | o1-mini                                   | —    | —    | ✅    | —      |
-| OpenAI               | openai        | OPENAI_API_KEY               | o1-preview                                | —    | —    | ✅    | —      |
-| Anthropic            | anthropic     | ANTHROPIC_API_KEY            | claude-4-opus-20250514                    | —    | —    | ✅    | —      |
-| Anthropic            | anthropic     | ANTHROPIC_API_KEY            | claude-4-sonnet-20250514                  | —    | —    | ✅    | —      |
-| Anthropic            | anthropic     | ANTHROPIC_API_KEY            | claude-3-7-sonnet-20250219                | —    | —    | ✅    | —      |
-| Anthropic            | anthropic     | ANTHROPIC_API_KEY            | claude-3-5-sonnet-20241022                | —    | —    | ✅    | —      |
-| Anthropic            | anthropic     | ANTHROPIC_API_KEY            | claude-3-5-sonnet-20240620                | —    | —    | ✅    | —      |
-| Anthropic            | anthropic     | ANTHROPIC_API_KEY            | claude-3-5-haiku-20241022                 | —    | —    | ✅    | —      |
-| Mistral              | mistral       | MISTRAL_API_KEY              | pixtral-large-latest                      | —    | —    | ✅    | —      |
-| Mistral              | mistral       | MISTRAL_API_KEY              | mistral-large-latest                      | —    | —    | ✅    | —      |
-| Mistral              | mistral       | MISTRAL_API_KEY              | mistral-small-latest                      | —    | —    | ✅    | —      |
-| Mistral              | mistral       | MISTRAL_API_KEY              | pixtral-12b-2409                          | —    | —    | ✅    | —      |
-| Google Generative AI | google        | GOOGLE_GENERATIVE_AI_API_KEY | gemini-2.0-flash-exp                      | —    | —    | ✅    | —      |
-| Google Generative AI | google        | GOOGLE_GENERATIVE_AI_API_KEY | gemini-1.5-flash                          | —    | —    | ✅    | —      |
-| Google Generative AI | google        | GOOGLE_GENERATIVE_AI_API_KEY | gemini-1.5-pro                            | —    | —    | ✅    | —      |
-| Google Vertex        | google        | GOOGLE_VERTEX_API_KEY        | gemini-2.0-flash-exp                      | —    | —    | ✅    | —      |
-| Google Vertex        | google        | GOOGLE_VERTEX_API_KEY        | gemini-1.5-flash                          | —    | —    | ✅    | —      |
-| Google Vertex        | google        | GOOGLE_VERTEX_API_KEY        | gemini-1.5-pro                            | —    | —    | ✅    | —      |
-| DeepSeek             | deepseek      | DEEPSEEK_API_KEY             | deepseek-chat                             | —    | —    | ✅    | —      |
-| DeepSeek             | deepseek      | DEEPSEEK_API_KEY             | deepseek-reasoner                         | —    | —    | ✅    | —      |
-| Cerebras             | cerebras      | CEREBRAS_API_KEY             | llama3.1-8b                               | —    | —    | ✅    | —      |
-| Cerebras             | cerebras      | CEREBRAS_API_KEY             | llama3.1-70b                              | —    | —    | ✅    | —      |
-| Cerebras             | cerebras      | CEREBRAS_API_KEY             | llama3.3-70b                              | —    | —    | ✅    | —      |
-| Groq                 | groq          | GROQ_API_KEY                 | meta-llama/llama-4-scout-17b-16e-instruct | —    | —    | ✅    | —      |
-| Groq                 | groq          | GROQ_API_KEY                 | llama-3.3-70b-versatile                   | —    | —    | ✅    | —      |
-| Groq                 | groq          | GROQ_API_KEY                 | llama-3.1-8b-instant                      | —    | —    | ✅    | —      |
+| Anthropic Claude     | anthropic     | ANTHROPIC_API_KEY            | claude-3-opus-20240229                    | ✅    | ✅    | ✅    | —      |
+| Anthropic Claude     | anthropic     | ANTHROPIC_API_KEY            | claude-3-sonnet-20240229                  | ✅    | ✅    | ✅    | —      |
+| Anthropic Claude     | anthropic     | ANTHROPIC_API_KEY            | claude-3-haiku-20240307                   | ✅    | ✅    | ✅    | —      |
+| Anthropic Claude     | anthropic     | ANTHROPIC_API_KEY            | claude-2.1                                | —    | —    | ✅    | —      |
+| Anthropic Claude     | anthropic     | ANTHROPIC_API_KEY            | claude-instant-1.2                        | —    | —    | ✅    | —      |
+| OpenAI               | openai        | OPENAI_API_KEY               | gpt-4o                                    | ✅    | ✅    | ✅    | ✅      |
+| OpenAI               | openai        | OPENAI_API_KEY               | gpt-4o-mini                               | ✅    | ✅    | ✅    | ✅      |
+| OpenAI               | openai        | OPENAI_API_KEY               | gpt-4-turbo                               | ✅    | ✅    | ✅    | ✅      |
+| OpenAI               | openai        | OPENAI_API_KEY               | gpt-4                                     | ✅    | —    | ✅    | —      |
+| OpenAI               | openai        | OPENAI_API_KEY               | gpt-3.5-turbo                             | —    | —    | ✅    | ✅      |
+| Google               | google        | GOOGLE_API_KEY               | gemini-pro-1.5                            | ✅    | ✅    | ✅    | —      |
+| Google               | google        | GOOGLE_API_KEY               | gemini-pro                                | —    | —    | ✅    | —      |
+| Google               | google        | GOOGLE_API_KEY               | gemini-1.5-flash                          | ✅    | ✅    | ✅    | —      |
+| Google               | google        | GOOGLE_API_KEY               | gemini-1.5-pro                            | ✅    | ✅    | ✅    | —      |
+| Google               | google        | GOOGLE_API_KEY               | gemini-1.5-pro-exp-0801                   | ✅    | ✅    | ✅    | —      |
+| Google               | google        | GOOGLE_API_KEY               | gemini-1.5-pro-exp-0827                   | ✅    | ✅    | ✅    | —      |
+| Google               | google        | GOOGLE_API_KEY               | gemini-1.5-flash-exp-0801                 | ✅    | ✅    | ✅    | —      |
+| Google               | google        | GOOGLE_API_KEY               | gemini-1.5-flash-exp-0827                 | ✅    | ✅    | ✅    | —      |
+| Google               | google        | GOOGLE_API_KEY               | gemini-1.5-pro-latest                     | ✅    | ✅    | ✅    | —      |
+| Google               | google        | GOOGLE_API_KEY               | gemini-1.5-flash-latest                   | ✅    | ✅    | ✅    | —      |
+| Cohere               | cohere        | COHERE_API_KEY               | command-r-plus                            | —    | ✅    | ✅    | —      |
+| Cohere               | cohere        | COHERE_API_KEY               | command-r                                 | —    | ✅    | ✅    | —      |
+| Cohere               | cohere        | COHERE_API_KEY               | command                                   | —    | —    | —    | —      |
+| Cohere               | cohere        | COHERE_API_KEY               | command-light                             | —    | —    | —    | —      |
+| Mistral              | mistral       | MISTRAL_API_KEY              | mistral-large-latest                      | ✅    | ✅    | ✅    | —      |
+| Mistral              | mistral       | MISTRAL_API_KEY              | mistral-small-latest                      | —    | ✅    | ✅    | —      |
+| Mistral              | mistral       | MISTRAL_API_KEY              | mistral-nemo-latest                       | ✅    | ✅    | ✅    | —      |
+| Mistral              | mistral       | MISTRAL_API_KEY              | mistral-large-2407                        | ✅    | ✅    | ✅    | —      |
+| Mistral              | mistral       | MISTRAL_API_KEY              | mistral-large-2402                        | —    | ✅    | ✅    | —      |
+| Mistral              | mistral       | MISTRAL_API_KEY              | mistral-small-2402                        | —    | ✅    | ✅    | —      |
+| Meta                 | meta          | META_AI_API_KEY              | meta-llama-3-70b-instant                  | —    | —    | ✅    | —      |
+| Meta                 | meta          | META_AI_API_KEY              | meta-llama-3-8b-instant                   | —    | —    | ✅    | —      |
+| Meta                 | meta          | META_AI_API_KEY              | meta-llama-3-70b                          | —    | —    | ✅    | —      |
+| Meta                 | meta          | META_AI_API_KEY              | meta-llama-3-8b                           | —    | —    | ✅    | —      |
+| Perplexity           | perplexity    | PERPLEXITY_API_KEY           | pplx-7b-chat                               | —    | —    | —    | —      |
+| Perplexity           | perplexity    | PERPLEXITY_API_KEY           | pplx-70b-chat                              | —    | —    | —    | —      |
+| Perplexity           | perplexity    | PERPLEXITY_API_KEY           | pplx-8x7b-chat                             | —    | —    | —    | —      |
+| Perplexity           | perplexity    | PERPLEXITY_API_KEY           | pplx-7b-online                             | —    | —    | —    | —      |
+| Perplexity           | perplexity    | PERPLEXITY_API_KEY           | pplx-70b-online                            | —    | —    | —    | —      |
+| Perplexity           | perplexity    | PERPLEXITY_API_KEY           | pplx-8x7b-online                           | —    | —    | —    | —      |
+| DeepMind             | deepmind      | DEEPMIND_API_KEY             | gemini-flash-1.5                           | ✅    | ✅    | ✅    | —      |
+| DeepMind             | deepmind      | DEEPMIND_API_KEY             | gemini-pro-1.5                            | ✅    | ✅    | ✅    | —      |
+| DeepMind             | deepmind      | DEEPMIND_API_KEY             | gemini-flash-1.5-exp                       | ✅    | ✅    | ✅    | —      |
+| DeepMind             | deepmind      | DEEPMIND_API_KEY             | gemini-pro-1.5-exp                         | ✅    | ✅    | ✅    | —      |
+| DeepMind             | deepmind      | DEEPMIND_API_KEY             | gemini-flash-1.5-latest                    | ✅    | ✅    | ✅    | —      |
+| DeepMind             | deepmind      | DEEPMIND_API_KEY             | gemini-pro-1.5-latest                      | ✅    | ✅    | ✅    | —      |
+| Groq                 | groq          | GROQ_API_KEY                 | llama3-70b-8192                           | —    | —    | ✅    | —      |
+| Groq                 | groq          | GROQ_API_KEY                 | llama3-8b-8192                            | —    | —    | ✅    | —      |
 | Groq                 | groq          | GROQ_API_KEY                 | mixtral-8x7b-32768                        | —    | —    | ✅    | —      |
-| Groq                 | groq          | GROQ_API_KEY                 | gemma2-9b-it                              | —    | —    | ✅    | —      |
+| Groq                 | groq          | GROQ_API_KEY                 | gemma-7b-it                               | —    | —    | —    | —      |
+| Azure OpenAI         | azure         | AZURE_OPENAI_API_KEY         | {deploymentName}                          | ✅    | ✅    | ✅    | ✅      |
+| Together AI          | together      | TOGETHER_API_KEY             | mistralai/Mixtral-8x7B-v0.1               | —    | —    | ✅    | —      |
+| Together AI          | together      | TOGETHER_API_KEY             | mistralai/Mixtral-8x7B-Instruct-v0.1      | —    | —    | ✅    | —      |
+| Together AI          | together      | TOGETHER_API_KEY             | mistralai/Mistral-7B-v0.1                 | —    | —    | —    | —      |
+| Together AI          | together      | TOGETHER_API_KEY             | mistralai/Mistral-7B-Instruct-v0.1        | —    | —    | ✅    | —      |
+| Together AI          | together      | TOGETHER_API_KEY             | mistralai/Mistral-7B-Instruct-v0.2        | —    | —    | ✅    | —      |
+| Together AI          | together      | TOGETHER_API_KEY             | mistralai/Mistral-8x7B-v0.1               | —    | —    | ✅    | —      |
+| Together AI          | together      | TOGETHER_API_KEY             | mistralai/Mistral-8x7B-Instruct-v0.1      | —    | —    | ✅    | —      |
+| Together AI          | together      | TOGETHER_API_KEY             | meta-llama/Llama-3-8B                     | —    | —    | —    | —      |
+| Together AI          | together      | TOGETHER_API_KEY             | meta-llama/Llama-3-8B-Instruct            | —    | —    | ✅    | —      |
+| Together AI          | together      | TOGETHER_API_KEY             | meta-llama/Llama-3-70B                    | —    | —    | —    | —      |
+| Together AI          | together      | TOGETHER_API_KEY             | meta-llama/Llama-3-70B-Instruct           | —    | —    | ✅    | —      |
+| Together AI          | together      | TOGETHER_API_KEY             | meta-llama/Llama-2-7B-Chat                | —    | —    | ✅    | —      |
+| Together AI          | together      | TOGETHER_API_KEY             | meta-llama/Llama-2-13B-Chat               | —    | —    | ✅    | —      |
+| Together AI          | together      | TOGETHER_API_KEY             | meta-llama/Llama-2-70B-Chat               | —    | —    | ✅    | —      |
+| Together AI          | together      | TOGETHER_API_KEY             | meta-llama/Llama-2-7B                     | —    | —    | —    | —      |
+| Together AI          | together      | TOGETHER_API_KEY             | meta-llama/Llama-2-13B                    | —    | —    | —    | —      |
+| Together AI          | together      | TOGETHER_API_KEY             | meta-llama/Llama-2-70B                    | —    | —    | —    | —      |
+| Together AI          | together      | TOGETHER_API_KEY             | microsoft/Phi-3-medium-4k-instruct        | —    | —    | ✅    | —      |
+| Together AI          | together      | TOGETHER_API_KEY             | microsoft/Phi-3-mini-4k-instruct          | —    | —    | ✅    | —      |
+| Together AI          | together      | TOGETHER_API_KEY             | microsoft/Phi-3-mini-128k-instruct        | —    | —    | ✅    | —      |
+| Together AI          | together      | TOGETHER_API_KEY             | NousResearch/Nous-Hermes-2-Mixtral-8x7B-DPO | —    | —    | ✅    | —      |
+| Together AI          | together      | TOGETHER_API_KEY             | NousResearch/Nous-Hermes-2-Mistral-7B-DPO | —    | —    | ✅    | —      |
+| Together AI          | together      | TOGETHER_API_KEY             | NousResearch/Nous-Hermes-2-SOLAR-10.7B-DPO | —    | —    | ✅    | —      |
+| Together AI          | together      | TOGETHER_API_KEY             | Qwen/Qwen1.5-14B-Chat                     | —    | —    | ✅    | —      |
+| Together AI          | together      | TOGETHER_API_KEY             | Qwen/Qwen1.5-72B-Chat                     | —    | —    | ✅    | —      |
+| Together AI          | together      | TOGETHER_API_KEY             | CodeLlama/CodeLlama-7B-Instruct-hf        | —    | —    | —    | —      |
+| Together AI          | together      | TOGETHER_API_KEY             | CodeLlama/CodeLlama-13B-Instruct-hf       | —    | —    | —    | —      |
+| Together AI          | together      | TOGETHER_API_KEY             | CodeLlama/CodeLlama-34B-Instruct-hf       | —    | —    | —    | —      |
+| Together AI          | together      | TOGETHER_API_KEY             | CodeLlama/CodeLlama-70B-Instruct-hf       | —    | —    | —    | —      |
 
-> 来源：AI SDK | Model Capabilities ([mastra.ai][1])
+## 特性说明
+
+- **图像输入**：模型是否支持接收图像作为输入
+- **对象生成**：模型是否支持生成结构化对象（而非仅文本）
+- **使用工具**：模型是否能调用外部工具和API
+- **工具流式输出**：模型是否支持工具调用的流式响应
 
 

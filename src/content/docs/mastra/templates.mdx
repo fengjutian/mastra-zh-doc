@@ -1,0 +1,60 @@
+---
+title: " 模板（Templates）"
+description: ""
+sidebar_order: 1
+category: "Mastra"
+---
+
+Templates 是预建的 Mastra 项目，用来展示特定用例和模式。你可以在 templates 目录中浏览可用模板。
+
+## 使用模板（Using Templates）
+
+使用 `create-mastra` 命令来安装一个模板：
+
+```text
+npm  
+yarn  
+pnpm  
+bun  
+
+npx create-mastra@latest --template template-name  
+yarn dlx create-mastra@latest --template template-name  
+pnpm create mastra@latest --template template-name  
+bun create mastra@latest --template template-name  
+```
+
+例如，要创建一个 **text-to-SQL** 应用：
+
+```text
+npx create-mastra@latest --template text-to-sql
+```
+
+## 设置模板（Setting Up a Template）
+
+安装完模板后：
+
+1. 进入你的项目目录：
+
+   ```text
+   cd your-project-name
+   ```
+
+2. 配置环境变量：
+
+   ```text
+   cp .env.example .env
+   ```
+
+   编辑 `.env`，填入模板 README 中所示的 API 密钥等内容。
+
+3. 启动开发环境：
+
+   ```text
+   npm run dev
+   ```
+
+每个模板都包含一个完整的 README，其中含有特定的设置说明和使用示例。
+
+如果你想了解如何 **创建模板**，可以查看 Templates 参考（Templates Reference）。
+
+

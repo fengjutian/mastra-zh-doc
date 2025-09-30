@@ -1,0 +1,151 @@
+---
+title: "模型提供者（Model Providers）"
+description: ""
+sidebar_order: 1
+category: "Mastra"
+---
+
+模型提供者用于与不同的语言模型进行交互。Mastra 使用 **Vercel 的 AI SDK** 作为模型路由层，以便为多种模型提供类似的语法。
+（原文：Mastra uses Vercel’s AI SDK as a model routing layer to provide a similar syntax for many models） ([Mastra][1])
+
+在 `src/mastra/agents/weather-agent.ts` 中可能的写法示例如下：
+
+```ts
+import { openai } from "@ai-sdk/openai";
+import { Agent } from "@mastra/core/agent";
+
+const agent = new Agent({
+  name: "WeatherAgent",
+  instructions: "Instructions for the agent...",
+  model: openai("gpt-4-turbo"),
+});
+const result = await agent.generate("What is the weather like?");
+```
+
+---
+
+## AI SDK 模型提供者的类型（Types of AI SDK model providers）
+
+AI SDK 中的模型提供者可以被归为三大类：
+
+* **Official providers**（官方提供者，由 AI SDK 团队维护） ([Mastra][1])
+* **OpenAI-compatible providers**（兼容 OpenAI API 的提供者） ([Mastra][1])
+* **Community providers**（社区提供者） ([Mastra][1])
+
+你可以在 AI SDK 的文档里找到所有可用模型提供者的列表。 ([Mastra][1])
+AI SDK 的模型提供者都是以包（package）的形式安装到你的 Mastra 项目里。安装 Mastra 项目时，会默认安装一个模型提供者。若你想使用不同的提供者，就需要额外安装它。 ([Mastra][1])
+
+下面是一些示例，展示如何在 Mastra 中配置不同类型的模型提供者： ([Mastra][1])
+
+---
+
+### 官方提供者（Official providers）
+
+官方提供者由 AI SDK 团队维护。此类包通常以 `@ai-sdk/` 为前缀，例如 `@ai-sdk/anthropic`、`@ai-sdk/openai` 等。 ([Mastra][1])
+
+最简单的用法示例：
+
+```ts
+import { openai } from "@ai-sdk/openai";
+import { Agent } from "@mastra/core/agent";
+
+const agent = new Agent({
+  name: "WeatherAgent",
+  instructions: "Instructions for the agent...",
+  model: openai("gpt-4-turbo"),
+});
+```
+
+如果需要自定义配置，可以用辅助函数（helper）导入并配置，如下示例：
+
+```ts
+import { createOpenAI } from "@ai-sdk/openai";
+import { Agent } from "@mastra/core/agent";
+
+const openai = createOpenAI({
+  baseUrl: "<your-custom-base-url>",
+  apiKey: "<your-custom-api-key>",
+  ...otherOptions,
+});
+const agent = new Agent({
+  name: "WeatherAgent",
+  instructions: "Instructions for the agent...",
+  model: openai("<model-name>"),
+});
+```
+
+---
+
+### OpenAI 兼容提供者（OpenAI-compatible providers）
+
+一些语言模型提供者实现了与 OpenAI API 兼容的接口。对于这些提供者，你可以使用 `@ai-sdk/openai-compatible` 包来接入。 ([Mastra][1])
+
+下面是一个通用的设置与 provider 实例创建示例：
+
+```ts
+import { createOpenAICompatible } from "@ai-sdk/openai-compatible";
+import { Agent } from "@mastra/core/agent";
+
+const openaiCompatible = createOpenAICompatible({
+  name: "<model-name>",
+  baseUrl: "<base-url>",
+  apiKey: "<api-key>",
+  headers: {},
+  queryParams: {},
+  fetch: async (url, options) => {
+    // custom fetch logic
+    return fetch(url, options);
+  },
+});
+
+const agent = new Agent({
+  name: "WeatherAgent",
+  instructions: "Instructions for the agent...",
+  model: openaiCompatible("<model-name>"),
+});
+```
+
+在这个示例中，你可以自定义 `fetch` 的行为、HTTP headers、query 参数等。若要了解更多关于兼容提供者的细节，请参阅 AI SDK 文档。 ([Mastra][1])
+
+---
+
+### 社区提供者（Community providers）
+
+AI SDK 提供一个 **Language Model Specification（语言模型规范）**。遵循这个规范，你可以为 AI SDK 构建自己的模型提供者。已有一些社区实现了这个规范，与你的 Mastra 集成时可以直接使用。 ([Mastra][1])
+
+下面以 **Ollama 提供者** 为例，演示在 Mastra 中如何使用：
+
+```ts
+import { ollama } from "ollama-ai-provider-v2";
+import { Agent } from "@mastra/core/agent";
+
+const agent = new Agent({
+  name: "WeatherAgent",
+  instructions: "Instructions for the agent...",
+  model: ollama("llama3.2:latest"),
+});
+```
+
+你也可以通过 `createOllama(...)` 来对该提供者进行配置：
+
+```ts
+import { createOllama } from "ollama-ai-provider-v2";
+import { Agent } from "@mastra/core/agent";
+
+const ollama = createOllama({
+  baseUrl: "<your-custom-base-url>",
+  ...otherOptions,
+});
+
+const agent = new Agent({
+  name: "WeatherAgent",
+  instructions: "Instructions for the agent...",
+  model: ollama("llama3.2:latest"),
+});
+```
+
+虽然这个示例是针对 Ollama 提供者的，但其他社区提供者（如 `openrouter`、`azure` 等）也可以以类似方式使用。 ([Mastra][1])
+
+不同的 AI 提供者可能具有不同的配置选项／参数，具体请参考 AI SDK 文档。 ([Mastra][1])
+
+

@@ -1,0 +1,65 @@
+---
+title: "模型能力（Model Capabilities）"
+description: ""
+sidebar_order: 1
+category: "Mastra"
+---
+
+AI 提供商支持不同的语言模型，各模型具有不同的能力。并非所有模型都支持结构化输出、图像输入、对象生成、工具使用或工具流式输出。
+
+下面是一些流行模型的能力对照：
+
+| AI 模型                | 提供商（Provider） | 环境变量                         | 模型 ID                                     | 图像输入 | 对象生成 | 使用工具 | 工具流式输出 |
+| -------------------- | ------------- | ---------------------------- | ----------------------------------------- | ---- | ---- | ---- | ------ |
+| xAI Grok             | xai           | XAI_API_KEY                  | grok-3                                    | —    | —    | ✅    | —      |
+| xAI Grok             | xai           | XAI_API_KEY                  | grok-3-fast                               | —    | —    | ✅    | —      |
+| xAI Grok             | xai           | XAI_API_KEY                  | grok-3-mini                               | —    | —    | ✅    | —      |
+| xAI Grok             | xai           | XAI_API_KEY                  | grok-3-mini-fast                          | —    | —    | ✅    | —      |
+| xAI Grok             | xai           | XAI_API_KEY                  | grok-2-1212                               | —    | —    | ✅    | —      |
+| xAI Grok             | xai           | XAI_API_KEY                  | grok-2-vision-1212                        | ✅    | —    | ✅    | —      |
+| xAI Grok             | xai           | XAI_API_KEY                  | grok-beta                                 | —    | —    | ✅    | —      |
+| xAI Grok             | xai           | XAI_API_KEY                  | grok-vision-beta                          | ✅    | —    | ✅    | —      |
+| Vercel               | vercel        | VERCEL_API_KEY               | v0-1.0-md                                 | —    | —    | ✅    | —      |
+| OpenAI               | openai        | OPENAI_API_KEY               | gpt-4.1                                   | —    | —    | ✅    | —      |
+| OpenAI               | openai        | OPENAI_API_KEY               | gpt-4.1-mini                              | —    | —    | ✅    | —      |
+| OpenAI               | openai        | OPENAI_API_KEY               | gpt-4.1-nano                              | —    | —    | ✅    | —      |
+| OpenAI               | openai        | OPENAI_API_KEY               | gpt-4o                                    | —    | —    | ✅    | ✅      |
+| OpenAI               | openai        | OPENAI_API_KEY               | gpt-4o-mini                               | —    | —    | ✅    | ✅      |
+| OpenAI               | openai        | OPENAI_API_KEY               | gpt-4-turbo                               | —    | —    | ✅    | ✅      |
+| OpenAI               | openai        | OPENAI_API_KEY               | gpt-4                                     | —    | —    | ✅    | —      |
+| OpenAI               | openai        | OPENAI_API_KEY               | o3-mini                                   | —    | —    | ✅    | —      |
+| OpenAI               | openai        | OPENAI_API_KEY               | o3                                        | —    | —    | ✅    | —      |
+| OpenAI               | openai        | OPENAI_API_KEY               | o4-mini                                   | —    | —    | ✅    | —      |
+| OpenAI               | openai        | OPENAI_API_KEY               | o1                                        | —    | —    | ✅    | —      |
+| OpenAI               | openai        | OPENAI_API_KEY               | o1-mini                                   | —    | —    | ✅    | —      |
+| OpenAI               | openai        | OPENAI_API_KEY               | o1-preview                                | —    | —    | ✅    | —      |
+| Anthropic            | anthropic     | ANTHROPIC_API_KEY            | claude-4-opus-20250514                    | —    | —    | ✅    | —      |
+| Anthropic            | anthropic     | ANTHROPIC_API_KEY            | claude-4-sonnet-20250514                  | —    | —    | ✅    | —      |
+| Anthropic            | anthropic     | ANTHROPIC_API_KEY            | claude-3-7-sonnet-20250219                | —    | —    | ✅    | —      |
+| Anthropic            | anthropic     | ANTHROPIC_API_KEY            | claude-3-5-sonnet-20241022                | —    | —    | ✅    | —      |
+| Anthropic            | anthropic     | ANTHROPIC_API_KEY            | claude-3-5-sonnet-20240620                | —    | —    | ✅    | —      |
+| Anthropic            | anthropic     | ANTHROPIC_API_KEY            | claude-3-5-haiku-20241022                 | —    | —    | ✅    | —      |
+| Mistral              | mistral       | MISTRAL_API_KEY              | pixtral-large-latest                      | —    | —    | ✅    | —      |
+| Mistral              | mistral       | MISTRAL_API_KEY              | mistral-large-latest                      | —    | —    | ✅    | —      |
+| Mistral              | mistral       | MISTRAL_API_KEY              | mistral-small-latest                      | —    | —    | ✅    | —      |
+| Mistral              | mistral       | MISTRAL_API_KEY              | pixtral-12b-2409                          | —    | —    | ✅    | —      |
+| Google Generative AI | google        | GOOGLE_GENERATIVE_AI_API_KEY | gemini-2.0-flash-exp                      | —    | —    | ✅    | —      |
+| Google Generative AI | google        | GOOGLE_GENERATIVE_AI_API_KEY | gemini-1.5-flash                          | —    | —    | ✅    | —      |
+| Google Generative AI | google        | GOOGLE_GENERATIVE_AI_API_KEY | gemini-1.5-pro                            | —    | —    | ✅    | —      |
+| Google Vertex        | google        | GOOGLE_VERTEX_API_KEY        | gemini-2.0-flash-exp                      | —    | —    | ✅    | —      |
+| Google Vertex        | google        | GOOGLE_VERTEX_API_KEY        | gemini-1.5-flash                          | —    | —    | ✅    | —      |
+| Google Vertex        | google        | GOOGLE_VERTEX_API_KEY        | gemini-1.5-pro                            | —    | —    | ✅    | —      |
+| DeepSeek             | deepseek      | DEEPSEEK_API_KEY             | deepseek-chat                             | —    | —    | ✅    | —      |
+| DeepSeek             | deepseek      | DEEPSEEK_API_KEY             | deepseek-reasoner                         | —    | —    | ✅    | —      |
+| Cerebras             | cerebras      | CEREBRAS_API_KEY             | llama3.1-8b                               | —    | —    | ✅    | —      |
+| Cerebras             | cerebras      | CEREBRAS_API_KEY             | llama3.1-70b                              | —    | —    | ✅    | —      |
+| Cerebras             | cerebras      | CEREBRAS_API_KEY             | llama3.3-70b                              | —    | —    | ✅    | —      |
+| Groq                 | groq          | GROQ_API_KEY                 | meta-llama/llama-4-scout-17b-16e-instruct | —    | —    | ✅    | —      |
+| Groq                 | groq          | GROQ_API_KEY                 | llama-3.3-70b-versatile                   | —    | —    | ✅    | —      |
+| Groq                 | groq          | GROQ_API_KEY                 | llama-3.1-8b-instant                      | —    | —    | ✅    | —      |
+| Groq                 | groq          | GROQ_API_KEY                 | mixtral-8x7b-32768                        | —    | —    | ✅    | —      |
+| Groq                 | groq          | GROQ_API_KEY                 | gemma2-9b-it                              | —    | —    | ✅    | —      |
+
+> 来源：AI SDK | Model Capabilities ([mastra.ai][1])
+
+

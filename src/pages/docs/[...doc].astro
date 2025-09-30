@@ -26,7 +26,17 @@ export async function getStaticPaths() {
 type Props = CollectionEntry<'docs'>;
 
 const currentDoc = Astro.props;
-const { Content } = await render(currentDoc);
+const { Content, headings } = await render(currentDoc);
+
+// 生成文档内目录数据
+const tableOfContents = headings.filter(h => h.depth >= 2 && h.depth <= 4).map(heading => ({
+  id: heading.slug,
+  text: heading.text,
+  depth: heading.depth
+}));
+
+// 检查是否有可显示的目录项
+const hasTableOfContents = tableOfContents.length > 0;
 
 // 获取所有文档用于侧边栏
 const sidebarDocsEntries = await getCollection('docs');
@@ -83,6 +93,13 @@ if (currentDoc) {
         max-width: 1400px;
         margin: auto;
         padding: 1em 1em 3em;
+      }
+      
+      /* 主内容容器 - 用于内容和右侧目录 */
+      .content-container {
+        display: flex;
+        gap: 2rem;
+        flex: 1;
       }
       
       /* 侧边栏样式 - 保持功能同时使用全局变量 */
@@ -142,7 +159,63 @@ if (currentDoc) {
       /* 内容区域样式 - 保持与全局样式一致 */
       .content {
         flex: 1;
-        max-width: 800px;
+        max-width: 1200px;
+      }
+      
+      /* 右侧目录样式 */
+      .right-sidebar {
+        width: 280px;
+        flex-shrink: 0;
+        position: sticky;
+        top: 2rem;
+        max-height: calc(100vh - 4rem);
+        overflow-y: auto;
+        padding-left: 1rem;
+        border-left: 1px solid rgba(var(--gray-light), 100%);
+        font-size: 0.9rem;
+      }
+      
+      .right-sidebar h3 {
+        margin-top: 0;
+        margin-bottom: 1rem;
+        color: rgb(var(--black));
+        font-size: 1.1em;
+      }
+      
+      .toc-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+      }
+      
+      .toc-list li {
+        margin: 0.35rem 0;
+      }
+      
+      .toc-list a {
+        display: block;
+        padding: 0.35rem 0;
+        color: rgb(var(--gray-dark));
+        text-decoration: none;
+        transition: color 0.2s;
+      }
+      
+      .toc-list a:hover {
+        color: var(--accent);
+      }
+      
+      .toc-item-h2 {
+        margin-left: 0;
+      }
+      
+      .toc-item-h3 {
+        margin-left: 1rem;
+        font-size: 0.95em;
+      }
+      
+      .toc-item-h4 {
+        margin-left: 2rem;
+        font-size: 0.9em;
       }
       
       .content .description {
@@ -154,6 +227,34 @@ if (currentDoc) {
       @media (max-width: 1024px) {
         .sidebar {
           width: 240px;
+        }
+      }
+      
+      @media (max-width: 1200px) {
+        .right-sidebar {
+          width: 240px;
+        }
+      }
+      
+      @media (max-width: 1024px) {
+        .sidebar {
+          width: 240px;
+        }
+        
+        .content-container {
+          flex-direction: column;
+        }
+        
+        .right-sidebar {
+          width: 100%;
+          position: static;
+          max-height: none;
+          overflow-y: visible;
+          padding-left: 0;
+          border-left: none;
+          border-top: 1px solid rgba(var(--gray-light), 100%);
+          padding-top: 1rem;
+          margin-top: 1rem;
         }
       }
       
@@ -178,7 +279,7 @@ if (currentDoc) {
     <Header />
     <main>
       <div class="docs-layout">
-        <!-- 侧边栏目录 -->
+        <!-- 左侧文档导航 -->
         <div class="sidebar">
           <h2 style="margin-top: 0;">Mastra 文档目录</h2>
           {Object.entries(docsByCategory)
@@ -217,23 +318,43 @@ if (currentDoc) {
           )}
         </div>
         
-        <!-- 主要内容区域 -->
-        <div class="content">
-          {currentDoc ? (
-            <article>
-              <h1>{currentDoc.data.title}</h1>
-              <p class="description" style="color: #666; font-size: 1.125rem; margin-bottom: 2rem;">
-                {currentDoc.data.description}
-              </p>
-              <Content />
-            </article>
-          ) : (
-            <div style="text-align: center; padding: 3rem 0;">
-              <h2>欢迎使用 Mastra 文档</h2>
-              <p>请在左侧选择一个文档查看详情</p>
-            </div>
-          )}
+        <!-- 内容和右侧目录容器 -->
+        <div class="content-container">
+          <!-- 主要内容区域 -->
+          <div class="content">
+            {currentDoc ? (
+              <article>
+                <h1>{currentDoc.data.title}</h1>
+                <p class="description" style="color: #666; font-size: 1.125rem; margin-bottom: 2rem;">
+                  {currentDoc.data.description}
+                </p>
+                <Content />
+              </article>
+            ) : (
+              <div style="text-align: center; padding: 3rem 0;">
+                <h2>欢迎使用 Mastra 文档</h2>
+                <p>请在左侧选择一个文档查看详情</p>
+              </div>
+            )}
+          </div>
+          
+  
         </div>
+
+        <!-- 右侧文档内目录 -->
+        {hasTableOfContents && currentDoc && (
+          <div class="right-sidebar">
+            <h3>文档目录</h3>
+            <ul class="toc-list">
+              {tableOfContents.map((item, index) => (
+                <li key={index} class={`toc-item-h${item.depth}`}>
+                  <a href={`#${item.id}`}>{item.text}</a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+
       </div>
     </main>
     <Footer />
